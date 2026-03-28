@@ -1,19 +1,19 @@
 # RAG Implementation with LlamaIndex and LanceDB
 
-This notebook demonstrates a complete RAG (Retrieval Augmented Generation) implementation using LlamaIndex and LanceDB. We'll explore three different approaches:
+# This notebook demonstrates a complete RAG (Retrieval Augmented Generation) implementation using LlamaIndex and LanceDB. We'll explore three different approaches:
 
-1. **Vector Search Only** - Fast retrieval without LLM generation
-2. **HuggingFace API Integration** - Cloud-based LLM with authentication
-3. **Local LLM with Ollama** - Complete local solution
+# 1. **Vector Search Only** - Fast retrieval without LLM generation
+# 2. **HuggingFace API Integration** - Cloud-based LLM with authentication
+# 3. **Local LLM with Ollama** - Complete local solution
 
-## Overview
+# ## Overview
 
-The notebook covers:
-- Data loading and preparation from HuggingFace datasets
-- Vector store setup with LanceDB
-- Embedding generation with HuggingFace models
-- Three different query approaches with increasing complexity
-- Utility functions for table exploration and optimization
+# The notebook covers:
+# - Data loading and preparation from HuggingFace datasets
+# - Vector store setup with LanceDB
+# - Embedding generation with HuggingFace models
+# - Three different query approaches with increasing complexity
+# - Utility functions for table exploration and optimization
 ## 1. Install Required Dependencies
 # # Install all required packages
 # !pip install llama-index llama-index-vector-stores-lancedb llama-index-embeddings-huggingface llama-index-llms-huggingface-api lancedb datasets -q
@@ -135,10 +135,13 @@ async def create_and_populate_index(documents, db, table_name):
     return vector_store, embed_model
 
 # Create embeddings and populate vector store
-vector_store, embed_model = await create_and_populate_index(documents, db, table_name)
+async def initialize_index():
+    return await create_and_populate_index(documents, db, table_name)
+
+vector_store, embed_model = nest_asyncio.asyncio.run(initialize_index())
 ## 6. Option 1: Vector Search Only (No LLM)
 
-This approach provides fast document retrieval without LLM generation. Perfect for finding relevant content quickly.
+# This approach provides fast document retrieval without LLM generation. Perfect for finding relevant content quickly.
 def perform_vector_search(db, table_name, query_text, embed_model, top_k=5):
     """
     Perform direct vector search on LanceDB
@@ -191,7 +194,7 @@ def test_vector_search():
 test_vector_search()
 ## 7. Option 2: RAG with HuggingFace API
 
-This approach uses HuggingFace's cloud API for LLM generation. Requires API token authentication.
+# This approach uses HuggingFace's cloud API for LLM generation. Requires API token authentication.
 # Set your HuggingFace API token here
 # Get your free token from: https://huggingface.co/settings/tokens
 os.environ["HUGGINGFACE_API_KEY"] = "your_token_here"  # Replace with your actual token
@@ -268,7 +271,7 @@ async def test_huggingface_rag():
 # await test_huggingface_rag()
 ## 8. Option 3: RAG with Local LLM (Ollama)
 
-This approach uses a completely local LLM setup. No internet required after initial setup.
+# This approach uses a completely local LLM setup. No internet required after initial setup.
 def check_ollama_installed():
     """Check if Ollama is installed"""
     try:
@@ -505,23 +508,23 @@ def show_usage_examples():
 show_usage_examples()
 ## Summary
 
-This notebook provides three complete RAG implementation approaches:
+# This notebook provides three complete RAG implementation approaches:
 
-### Option 1: Vector Search Only
-- **Best for**: Fast document retrieval, no generation needed
-- **Advantages**: Very fast, no API costs, no setup complexity
-- **Use case**: Finding relevant documents, initial exploration
+# ### Option 1: Vector Search Only
+# - **Best for**: Fast document retrieval, no generation needed
+# - **Advantages**: Very fast, no API costs, no setup complexity
+# - **Use case**: Finding relevant documents, initial exploration
 
-### Option 2: HuggingFace API
-- **Best for**: High-quality responses with cloud LLMs
-- **Advantages**: Latest models, no local resources needed
-- **Requirements**: HuggingFace API token
-- **Use case**: Production applications with budget for API calls
+# ### Option 2: HuggingFace API
+# - **Best for**: High-quality responses with cloud LLMs
+# - **Advantages**: Latest models, no local resources needed
+# - **Requirements**: HuggingFace API token
+# - **Use case**: Production applications with budget for API calls
 
-### Option 3: Local LLM (Ollama)
-- **Best for**: Complete privacy, no internet dependency
-- **Advantages**: No API costs, full control, offline capability
-- **Requirements**: Ollama installation, local compute resources
-- **Use case**: Private data, cost-sensitive applications
+# ### Option 3: Local LLM (Ollama)
+# - **Best for**: Complete privacy, no internet dependency
+# - **Advantages**: No API costs, full control, offline capability
+# - **Requirements**: Ollama installation, local compute resources
+# - **Use case**: Private data, cost-sensitive applications
 
-Choose the approach that best fits your needs!
+# Choose the approach that best fits your needs!
