@@ -18,6 +18,10 @@
 # # Install all required packages
 # !pip install llama-index llama-index-vector-stores-lancedb llama-index-embeddings-huggingface llama-index-llms-huggingface-api lancedb datasets -q
 
+# Claudes suggestion to disable HuggingFace's XET warning for better notebook experience
+import os
+os.environ["HF_HUB_DISABLE_XET"] = "1"
+
 # # Additional packages for local LLM and utilities
 # !pip install llama-index-llms-ollama requests -q
 ## 2. Import Libraries and Setup
@@ -28,6 +32,8 @@ import requests
 import time
 from pathlib import Path
 from datasets import load_dataset
+from dotenv import load_dotenv
+import os
 
 # LlamaIndex core components
 from llama_index.core import SimpleDirectoryReader, VectorStoreIndex, Document
@@ -47,6 +53,10 @@ import nest_asyncio
 nest_asyncio.apply()
 
 print("All libraries imported successfully")
+
+# Load environment variables from .env file
+load_dotenv()
+
 ## 3. Data Preparation and Loading
 def prepare_data(num_samples=100):
     """
@@ -197,7 +207,7 @@ test_vector_search()
 # This approach uses HuggingFace's cloud API for LLM generation. Requires API token authentication.
 # Set your HuggingFace API token here
 # Get your free token from: https://huggingface.co/settings/tokens
-os.environ["HUGGINGFACE_API_KEY"] = "your_token_here"  # Replace with your actual token
+os.environ["HUGGINGFACE_API_KEY"] = os.getenv("HUGGINGFACE_API_KEY")
 
 def create_query_engine(vector_store, embed_model, llm=None):
     """
